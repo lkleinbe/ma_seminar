@@ -21,6 +21,7 @@ class Simulation_violation_probability:
         :return: the found error unreliability
         """
         for simulation_instance in self.simulations:
+            # todo maybe use itertools.chain
             for _ in simulation_instance:
                 pass
         return sum([not iterator.success for iterator in self.simulations]) / self.nr_of_instances
@@ -54,21 +55,23 @@ def simulation_violation_probabilty_over_nr_ues_start(qos: QoS_requirement, nr_c
     scs = []
     with concurrent.futures.ProcessPoolExecutor(max_workers=4) as executor:
         for nr_ues_start in range_nr_ues_start:
-            scs.append(System_characteristics(20, nr_ues_start, 0))
+            scs.append(System_characteristics(nr_channels, nr_ues_start, 0))
         for sc_i in range(len(scs)):
             futures_to_arguments[executor.submit(
                 simulation_violation_probabilty_worker, scs[sc_i], qos, nr_of_instances)] = scs[sc_i]
+        print(f"all submitted")
         for future in concurrent.futures.as_completed(futures_to_arguments):
-            # print(f"{futures_to_arguments[future]}: {future.result()}")
+            print(f"{futures_to_arguments[future]}: {future.result()}")
             nr_ues_start_return.append(futures_to_arguments[future].nr_ues_start)
             violation_probability_return.append(future.result())
     return nr_ues_start_return, violation_probability_return
 
 
 def simulation_violation_probabilty_over_backlog(sc: System_characteristics, backlog_range: range,
-                                                 required_burst_resolution_time: int, unreliability: float = 0):
+                                                 required_burst_resolution_time: int, nr_of_instances, unreliability: float = 0):
     """
     Does a simulation over a range of maximum tolerated backlogs. Time is fixed
+    :param nr_of_instances: how many simulations to perform
     :param unreliability: the allowed unreliability
     :param sc: The given System_characteristics
     :param backlog_range: the range over which the backlog should vary
@@ -94,7 +97,17 @@ def simulation_violation_probabilty_over_backlog(sc: System_characteristics, bac
 
 def simulation_violation_probability_over_resolution_time(sc: System_characteristics, max_tolerated_backlog: int,
                                                           required_burst_resolution_time_range: range,
+                                                          nr_of_instances,
                                                           unreliability: float = 0):
+    """
+    Does a simulation over a range of required burst resolution times. the max_tolerated_backlog is fixed
+    :param sc: the given System characteristics
+    :param max_tolerated_backlog: the maximum tolerated backlog
+    :param required_burst_resolution_time_range: the range, over which the burst resultion time is varied
+    :param nr_of_instances: the number of simulation instances
+    :param unreliability: the given unreliability
+    :return:
+    """
     time_return = []
     violation_probability_return = []
     futures_to_arguments = {}
@@ -109,29 +122,30 @@ def simulation_violation_probability_over_resolution_time(sc: System_characteris
             print(f"{futures_to_arguments[future]}: {future.result()}")
             time_return.append(futures_to_arguments[future].required_burst_resolution_time)
             violation_probability_return.append(future.result())
-        return violation_probability_return, violation_probability_return
+    return violation_probability_return, violation_probability_return
 
 
 if __name__ == "__main__":
+    pass
     # s = Simulation_violation_probability(System_characteristics(20, 160, 0),
     #                                      QoS_requirement(required_burst_resolution_time=500), 1000)
     # print(s.calculate_violation_probability())
-    #
+    # #
     # qos = QoS_requirement(required_burst_resolution_time=500)
     # sc = System_characteristics(20, 160, 0)
     #
     # print(simulation_violation_probabilty_worker(sc, qos, 1000))
-
+    #
     # qos = QoS_requirement(required_burst_resolution_time=500)
     # channel = 20
     # range_nr_ues_start = range(10, 300, 10)
     # nr_of_instances = 1000
     # print(list(zip(*simulation_violation_probabilty_over_nr_ues_start(qos, channel, range_nr_ues_start, nr_of_instances))))
 
-    required_burst_resolution_time: int
-    sc = System_characteristics(20, 180, 0)
-    range_backlog = range(10, 500, 10)
-    nr_of_instances = 1000
-    # simulation_violation_probabilty_over_backlog(sc, range_backlog, 500)
-    range_time = range(200, 700, 10)
-    simulation_violation_probability_over_resolution_time(sc, 150, range_time)
+    # required_burst_resolution_time: int
+    # sc = System_characteristics(20, 180, 0)
+    # range_backlog = range(10, 500, 10)
+    # nr_of_instances = 1000
+    # # simulation_violation_probabilty_over_backlog(sc, range_backlog, 500)
+    # range_time = range(200, 700, 10)
+    # # simulation_violation_probability_over_resolution_time(sc, 150, range_time)
