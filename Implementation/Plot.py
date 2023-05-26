@@ -54,7 +54,7 @@ def figure_5(M=range(10, 30, 10), N=1000):
     """
     time_range = range(0, 360, 10)
     b_e = 0
-
+    fig, ax = plt.subplots()
     for m in M:
         sc = System_characteristics(m, N, 0)
         data = np.column_stack(
@@ -65,4 +65,4 @@ def figure_5(M=range(10, 30, 10), N=1000):
 
 if __name__ == "__main__":
     nr_of_instances = 10000
-    figure_4()
+    figure_5()
