@@ -1,5 +1,7 @@
-import random
-import collections
+"""
+This file is only here as a demonstration. every simulation uses the iterative variant. however the original formula is
+recursive so this was the first implementation of it.
+"""
 import numpy as np
 import operator
 import timeit

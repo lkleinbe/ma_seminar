@@ -1,3 +1,6 @@
+"""
+Implements concurrent Simulation over ranges of different parameters. uses 4 workers as default
+"""
 from Backlog_deterministic_iterative import *
 import concurrent.futures
 
@@ -21,7 +24,6 @@ class Simulation_violation_probability:
         :return: the found error unreliability
         """
         for simulation_instance in self.simulations:
-            # todo maybe use itertools.chain
             for _ in simulation_instance:
                 pass
         return sum([not iterator.success for iterator in self.simulations]) / self.nr_of_instances
@@ -71,12 +73,13 @@ def simulation_violation_probabilty_over_backlog(sc: System_characteristics, bac
                                                  required_burst_resolution_time: int, nr_of_instances, unreliability: float = 0):
     """
     Does a simulation over a range of maximum tolerated backlogs. Time is fixed
-    :param nr_of_instances: how many simulations to perform
-    :param unreliability: the allowed unreliability
     :param sc: The given System_characteristics
     :param backlog_range: the range over which the backlog should vary
     :param required_burst_resolution_time: the required_burst_resolution time
+    :param nr_of_instances: how many simulations to perform
+    :param unreliability: the allowed unreliability
     :return: a list with the violation probabilities
+
     """
     backlog_return = []
     violation_probability_return = []
@@ -126,21 +129,20 @@ def simulation_violation_probability_over_resolution_time(sc: System_characteris
 
 
 if __name__ == "__main__":
-    pass
-    # s = Simulation_violation_probability(System_characteristics(20, 160, 0),
-    #                                      QoS_requirement(required_burst_resolution_time=500), 1000)
-    # print(s.calculate_violation_probability())
+    s = Simulation_violation_probability(System_characteristics(20, 160, 0),
+                                         QoS_requirement(required_burst_resolution_time=500), 1000)
+    print(s.calculate_violation_probability())
     # #
     # qos = QoS_requirement(required_burst_resolution_time=500)
     # sc = System_characteristics(20, 160, 0)
     #
     # print(simulation_violation_probabilty_worker(sc, qos, 1000))
     #
-    # qos = QoS_requirement(required_burst_resolution_time=500)
-    # channel = 20
-    # range_nr_ues_start = range(10, 300, 10)
-    # nr_of_instances = 1000
-    # print(list(zip(*simulation_violation_probabilty_over_nr_ues_start(qos, channel, range_nr_ues_start, nr_of_instances))))
+    qos = QoS_requirement(required_burst_resolution_time=500)
+    channel = 20
+    range_nr_ues_start = range(10, 300, 5)
+    nr_of_instances = 1000
+    print(list(zip(*simulation_violation_probabilty_over_nr_ues_start(qos, channel, range_nr_ues_start, nr_of_instances))))
 
     # required_burst_resolution_time: int
     # sc = System_characteristics(20, 180, 0)
