@@ -42,7 +42,8 @@ def simulation_violation_probabilty_worker(sc: System_characteristics, qos: QoS_
 
 
 def simulation_violation_probabilty_over_nr_ues_start(qos: QoS_requirement, nr_channels: int, range_nr_ues_start: range,
-                                                      nr_of_instances: int):
+                                                      nr_of_instances: int, ac_mode: AC_Mode = AC_Mode.no_barring,
+                                                      ac_probability:float = 1.0):
     """
     Does a simulation over a range of ues and returns the violation probabilites
     :param qos: The given QoS_requirement that has to be fullfilled
@@ -57,7 +58,7 @@ def simulation_violation_probabilty_over_nr_ues_start(qos: QoS_requirement, nr_c
     scs = []
     with concurrent.futures.ProcessPoolExecutor(max_workers=4) as executor:
         for nr_ues_start in range_nr_ues_start:
-            scs.append(System_characteristics(nr_channels, nr_ues_start, 0))
+            scs.append(System_characteristics(nr_channels, nr_ues_start, 0, ac_mode, ac_probability))
         for sc_i in range(len(scs)):
             futures_to_arguments[executor.submit(
                 simulation_violation_probabilty_worker, scs[sc_i], qos, nr_of_instances)] = scs[sc_i]
@@ -100,16 +101,14 @@ def simulation_violation_probabilty_over_backlog(sc: System_characteristics, bac
 
 def simulation_violation_probability_over_resolution_time(sc: System_characteristics, max_tolerated_backlog: int,
                                                           required_burst_resolution_time_range: range,
-                                                          nr_of_instances,
-                                                          unreliability: float = 0):
+                                                          nr_of_instances):
     """
     Does a simulation over a range of required burst resolution times. the max_tolerated_backlog is fixed
     :param sc: the given System characteristics
     :param max_tolerated_backlog: the maximum tolerated backlog
     :param required_burst_resolution_time_range: the range, over which the burst resultion time is varied
     :param nr_of_instances: the number of simulation instances
-    :param unreliability: the given unreliability
-    :return:
+    :return: a list with the violation probabilities
     """
     time_return = []
     violation_probability_return = []
@@ -138,11 +137,11 @@ if __name__ == "__main__":
     #
     # print(simulation_violation_probabilty_worker(sc, qos, 1000))
     #
-    qos = QoS_requirement(required_burst_resolution_time=500)
-    channel = 20
-    range_nr_ues_start = range(10, 300, 5)
+    qos = QoS_requirement(required_burst_resolution_time=300)
+    channel = 10
+    range_nr_ues_start = range(100, 1500, 100)
     nr_of_instances = 1000
-    print(list(zip(*simulation_violation_probabilty_over_nr_ues_start(qos, channel, range_nr_ues_start, nr_of_instances))))
+    print(list(zip(*simulation_violation_probabilty_over_nr_ues_start(qos, channel, range_nr_ues_start, nr_of_instances, AC_Mode.static_barring, 0.5))))
 
     # required_burst_resolution_time: int
     # sc = System_characteristics(20, 180, 0)
