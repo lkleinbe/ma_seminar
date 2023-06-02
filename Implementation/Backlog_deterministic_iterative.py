@@ -188,12 +188,17 @@ if __name__ == "__main__":
     print("Backlog dynamic estimated barring")
     for x in s4:
         print(x)
+    fig = plt.figure(figsize=(8, 6), dpi=80)
     plt.plot(s1.backlog_over_time, label = f"{s1.sc.ac_mode}")
     plt.plot(s2.backlog_over_time, label = f"{s2.sc.ac_mode} p={s2.sc.ac_probability}")
     plt.plot(s3.backlog_over_time, label = f"{s3.sc.ac_mode}")
     plt.plot(s4.backlog_over_time, label=f"{s4.sc.ac_mode}")
     plt.yscale("log")
-    plt.legend()
+    plt.legend(bbox_to_anchor=(0.5, -0.015), loc="lower center",
+                bbox_transform=fig.transFigure, ncol=2,mode="expand")
+    # fig.legend(loc=7)
+    # fig.tight_layout()
+    # fig.subplots_adjust(right=0.75)
     plt.show()
     print("No Barring execution Time: ", timeit.timeit(
         "for _ in Simulation_instance(System_characteristics(20, 170, 0, AC_Mode.no_barring, 0.5), QoS_requirement(required_burst_resolution_time=500)): pass",
