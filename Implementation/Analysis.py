@@ -10,10 +10,12 @@ def mgf_max(o):
     return m
 
 
-def formel_25(t2: int, b_e):
+def formel_25(t: int, b_e, N: int, O:range):
     m = min([exp(-b_e * o) * exp(o * N) * (mgf_max(o) ** t) + mgf_max(o) * (
                 (1 - (mgf_max(o) ** (t - 1))) / (1 - mgf_max(o)))] for o in range(O))
     # fixme what is M, n, t, O?
+    # n = number of ues,
+    # O is arbitrary non free integer
     return m
 
 
@@ -52,7 +54,9 @@ def formel_5(k, n, m, p_i):
 def analysis(sc: System_characteristics, qos: QoS_requirement):
     results = []
     for x in range(qos.required_burst_resolution_time):
-        # formel_25+formel_5
+        # todo chose c >1
+        # then we can use 25 to calculate that probability. with c we have given a b_e, t is obvious
+        # formel_25*formel_5
         p1 = 0
         p2 = 0
         results.append(p1 + p2)

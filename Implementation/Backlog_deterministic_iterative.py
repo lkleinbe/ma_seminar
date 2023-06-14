@@ -6,10 +6,9 @@ therefore faster
 import numpy as np
 import operator
 import timeit
-import matplotlib.pyplot as plt
 from dataclasses import dataclass
 from enum import Enum, auto
-from math import ceil
+
 
 
 @dataclass
@@ -73,7 +72,9 @@ class Simulation_instance(object):
         self.backlog_over_time = [self.backlog_current]
         self.success = False
 
+
         # Parameters dynamic estimated access barring
+        self.counts = None
         self.s_i= None
         self.v = self.sc.max_channels
         self.p = 1/self.sc.max_channels
@@ -85,8 +86,10 @@ class Simulation_instance(object):
             :return: the current backlog.
             """
             selected_channels = np.random.randint(0, self.sc.max_channels, active_ues)
-            counts = np.bincount(selected_channels)
-            self.s_i = operator.countOf(counts, 1)
+            self.counts = np.bincount(selected_channels)
+
+            self.s_i = operator.countOf(self.counts, 1)
+            # self.r = operator.countOf(counts, 0)
             self.backlog_current -= self.s_i
             self.backlog_over_time.append(self.backlog_current)
             if self.backlog_current <= self.qos.max_tolerated_backlog:
@@ -139,11 +142,11 @@ class Simulation_instance(object):
             self.backlog_current += self.sc.nr_ues_new
             active_ues = np.random.binomial(self.backlog_current, self.p)
             backlog_current = contention(active_ues)
-
+            r = operator.countOf(self.counts, 0)
             # for next step
-            delta_v = (0.582 * self.sc.max_channels) - 1.582 * (self.sc.max_channels-self.s_i)
+            delta_v = (0.582 * self.sc.max_channels) - 1.582 * r
             self.v += delta_v
-            a_t = max(0, delta_v)
+            a_t = max(0.0, delta_v)
             self.v += a_t - self.s_i    # c_t = self.s_i
             self.v = max(self.sc.max_channels, self.v)
             self.p = min(1.0, self.sc.max_channels/self.v)
@@ -172,6 +175,7 @@ class Simulation_instance(object):
 
 
 if __name__ == "__main__":
+    import matplotlib.pyplot as plt
     s1 = Simulation_instance(System_characteristics(20, 170, 0), QoS_requirement(max_tolerated_backlog=0))
     s2 = Simulation_instance(System_characteristics(20, 170, 0, AC_Mode.static_barring, 0.5), QoS_requirement(max_tolerated_backlog=0))
     s3 = Simulation_instance(System_characteristics(20, 170, 0, AC_Mode.dynamic_barring), QoS_requirement(max_tolerated_backlog=0))
@@ -193,7 +197,7 @@ if __name__ == "__main__":
     plt.plot(s2.backlog_over_time, label = f"{s2.sc.ac_mode} p={s2.sc.ac_probability}")
     plt.plot(s3.backlog_over_time, label = f"{s3.sc.ac_mode}")
     plt.plot(s4.backlog_over_time, label=f"{s4.sc.ac_mode}")
-    plt.yscale("log")
+    # plt.yscale("log")
     plt.legend(bbox_to_anchor=(0.5, -0.015), loc="lower center",
                 bbox_transform=fig.transFigure, ncol=2,mode="expand")
     # fig.legend(loc=7)
