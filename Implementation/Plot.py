@@ -71,11 +71,11 @@ def figure_4(save, M=range(10, 30, 10), N=1000):
         plt.title(f"burst resolution time vs partial violation probability, N = {N}")
         plt.show()
 
-def figure_5(save, M=range(10, 30, 10), N=1000, nr_of_instances= 10000):
+def figure_5(save, M=range(10, 30, 10), N=1000, nr_of_instances= 10_000):
     """
     violation probability vs Burst resolution time like in Fig 5
     """
-    time_ranges = [range(200, 360, 2), range(0, 180, 2)]
+    time_ranges = [range(200, 400, 2), range(0, 200, 2)]
     # time_range = range(0, 360, 10)
     b_e = 0
     fig, ax = plt.subplots()
@@ -83,16 +83,18 @@ def figure_5(save, M=range(10, 30, 10), N=1000, nr_of_instances= 10000):
         sc1 = System_characteristics(m, N, 0, AC_Mode.optimal_dynamic_barring)
         data1 = np.column_stack(
             simulation_violation_probability_over_resolution_time(sc1, b_e, time_range, nr_of_instances))
+        print(data1)
         data1 = data1[data1[:, 0].argsort()]
-        ax.plot(data1[:, 1], data1[:, 0], label=f"m= {m}, sim")
+        # print(data1)
+        ax.plot(data1[:, 0], data1[:, 1], label=f"m= {m}, sim")
         sc2 = System_characteristics(m, N, 0, AC_Mode.estimated_dynamic_barring)
         data2 = np.column_stack(
             simulation_violation_probability_over_resolution_time(sc2, b_e, time_range, nr_of_instances))
         data2 = data2[data2[:, 0].argsort()]
-        ax.plot(data2[:, 1], data2[:, 0], label=f"m= {m}, sim (est)")
+        ax.plot(data2[:, 0], data2[:, 1], label=f"m= {m}, sim (est)")
     plt.yscale("log")
     plt.grid()
-
+    plt.legend()
     # plt.xticks(range(11))
     plt.xlabel("Burst resolution time t slots")
     plt.ylabel("Violation probability.")

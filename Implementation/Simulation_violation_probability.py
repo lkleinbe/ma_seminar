@@ -125,7 +125,7 @@ def simulation_violation_probability_over_resolution_time(sc: System_characteris
             print(f"{futures_to_arguments[future]}: {future.result()}")
             time_return.append(futures_to_arguments[future].required_burst_resolution_time)
             violation_probability_return.append(future.result())
-    return violation_probability_return, violation_probability_return
+    return time_return, violation_probability_return
 
 
 if __name__ == "__main__":
