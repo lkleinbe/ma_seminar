@@ -89,6 +89,7 @@ def simulation_violation_probabilty_over_backlog(sc: System_characteristics, bac
     with concurrent.futures.ProcessPoolExecutor(max_workers=4) as executor:
         for backlog in backlog_range:
             qoss.append(QoS_requirement(backlog, required_burst_resolution_time, unreliability))
+
         for qos_i in range(len(qoss)):
             futures_to_arguments[executor.submit(
                 simulation_violation_probabilty_worker, sc, qoss[qos_i], nr_of_instances)] = qoss[qos_i]
@@ -124,7 +125,7 @@ def simulation_violation_probability_over_resolution_time(sc: System_characteris
             print(f"{futures_to_arguments[future]}: {future.result()}")
             time_return.append(futures_to_arguments[future].required_burst_resolution_time)
             violation_probability_return.append(future.result())
-    return violation_probability_return, violation_probability_return
+    return time_return, violation_probability_return
 
 
 if __name__ == "__main__":
