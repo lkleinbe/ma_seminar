@@ -1,34 +1,166 @@
 %! Author = Leonard
-%! Date = 09.05.2023
+%! Date = 14.06.2023
+% !TEX encoding = utf8
+% !TeX spellcheck = en_gb
 
 % Preamble
-\documentclass[11pt]{article}
-
+\documentclass[conference]{IEEEtran}
+\IEEEoverridecommandlockouts
+% The preceding line is only needed to identify funding in the first footnote. If that is unneeded, please comment it out.
 % Packages
-\usepackage{amsmath}
+\usepackage{cite}
+\usepackage{amsmath,amssymb,amsfonts}
 \usepackage{hyperref}
-\usepackage{pgf}
+\usepackage{algorithmic}
+\usepackage{graphicx}
+\usepackage{textcomp}
+\usepackage{xcolor}
+\usepackage{ieeetrantools}
 
 % Document
 \begin{document}
-    Testdocument ich schreibe hier etwas um den kram mal auszuprobieren
-    außerdem möchte ich testen, wie weit ich compilieren kann
-    \newpage
-    \newpage
-
-    \section{Introduction}
-    
-    
-    
-    
-    
-    \begin{figure}
-        \begin{center}
-            \input{figure_3.pgf}
-        \end{center}
-    \end{figure}
-    asdfasdfasdfasdf
+\title{On the Reliability of LTE Random Access: Performance Bounds for Machine-to-Machine Burst Resolution Time\\
+{\footnotesize Seminar: Distributed Computer Systems SS23}}
 
 
 
+\author{\IEEEauthorblockN{Leonard Kleinberger}
+\IEEEauthorblockA{
+    lkleinbe@rhrk.uni-kl.de}
+}
+\maketitle
+
+\begin{abstract}
+    tbd
+\end{abstract}
+
+
+\section{Introduction}
+\begin{itemize}
+    \item usecases:
+    \begin{itemize}
+        \item Power outage
+        \item Fleet management
+        \item Sensor networks
+        \item Emergency situations/environmental desasters
+    \end{itemize}
+\end{itemize}
+\section{Startup Procedure in LTE}
+\begin{itemize}
+    \item LTE System Setup
+    \begin{itemize}
+        \item UE, eNodeB, Core Network
+        \item We ignore Protocol Stack mostly.
+        We are only interested in Physical Layer to derive the necessary assumptions
+        and from there on only look at message level
+        \item We are interested in Setup until RRC is connected that is the connection setup between eNodeB and UE
+        From there on the UE can contact the core via eNodeB but that is not in the scope of this work.
+        RRC is will be disconnected when the UE is idle.
+    \end{itemize}
+    \item LTE Channels, Timing, Resource Grid
+    \begin{itemize}
+        \item Frames/Subframes/Symbols
+        \item OFDM, multiple carriers
+        \item Resource Grid
+    \end{itemize}
+    \item Over the Air Messages:
+    \begin{itemize}
+        \item Reference Signal, PSS, SSS
+        \item MIB, SIB1, SIB2, more SIBs
+        \item PRACH Preamble, RA Response, RRC Connection Request, RRC Connection Setup, RRC Connection Setup Complete
+        \item until PRACH Preamble everything is only downlink -> no collisions
+        \item PRACH Setup is only send in subframes specified by SIB2
+        \item different Preambles do not collide.
+        They use different sub-carrier.
+        They also do not include any ue specific parameters.
+        Number of available Preambles is specified in SIB2 and depends on cell usage and signal quality
+        \item RA Response contains the grant in the Resource Grid
+        \item During RRC Connection Request collision of multiple UEs.
+        eNodeB might decode 1 message or nothing, we cant tell
+        \item RRC Connection Setup will answer if message decoded successful; connected ue will realize; others will back of
+        \item UE is successfully connected and responds with RRC Connection setup complete
+    \end{itemize}
+    \item Access Barring
+    \begin{itemize}
+        \item eNodeB can control how many ues try to connect
+        \item cellBarred field in sib1 or sib2
+        \item sib1 for all ues, sib2 for specific types of ues allowing emergency operators to work; Classes go from A to E.
+        \item Static access barring can reduce the number of admitted ues significantly
+        However statically setting p will slow down connection time when only a few ues are trying to connect
+        \item dynamic access barring tries to adjust connect probability.
+        \item optimal algorithm
+        \item optimal algorithm is not applicable because eNodeB does not know how many UEs try to connect.
+        An Estimation based on failed Preambles is needed.
+        \item dynamic access barring with estimation
+    \end{itemize}
+\end{itemize}
+\section{Analysis}
+\begin{itemize}
+    \item Assumptions
+    \begin{itemize}
+        \item We only look at number of PRACH contention periods, since the actual number of contention periods is up to the eNodeB
+        \item RRC connections always fail, if a preamble is chosen by multiple ues.
+        That is essentially the worst case
+        \item we squash all 4 steps of RA Procedure into 1 Slot.
+        That implies that every ue knows before the next start of the procedure, if the RA procedure before was a success
+        ues dont content in multiple RA Procedures at the same time
+        the eNodeB knows before the next RA Procedure how many ues successfully connected on last try
+        \item we also assumes that the access barring probability can be updated between every timestep
+        \item assumptions are pretty generous in my opinion.
+        in reality the Ues only wait between 3-12 subframes before trying to PRACH again.
+        also the change p every step implies we only have 1 contention per 2 frames, essentially limiting this analysis
+        to the configurations with the lowest amount of prach phases.
+    \end{itemize}
+    \item QoS, System characteristics, $s_i$
+    \begin{itemize}
+        \item $SC = (M, N, access\_barring\_policy)$
+        \item we use discrete timesteps to differentiate between the contention periods.
+        \item at t = 0 N ues wake up
+        \item $QOS = (b^\epsilon, t, \epsilon)$
+        \item if a preamble is used multiple times is determined by:
+        \[s_{i,m}= \begin{cases}
+                       1& \text{if chosen by 1 UE}\\
+                       0 &\text{otherwise}
+        \end{cases}\]
+        Note that this is essentially an M-channel slotted AlOHA system where each channel corresponds to a chosen preamble
+    \end{itemize}
+    \item Iterative Formula
+    \begin{itemize}
+        \item \[B(i+1) = \max\{0, B(i)+a_i-s_i\}\] with \[s_i = \sum_{m=0}^Ms_{i,m}\]
+        \item this already allows analysis in a recursive/iterative way
+        \item explanation
+    \end{itemize}
+    \item Probabilistic Analysis
+    \begin{itemize}
+        \item Formel 26
+        \item first part can be computed fast using formula 25. Which uses formual 24 which uses formula 3
+        \item second part is relatively slow using iterative formula. however $CM<<N$
+        therefore it is faster than applying iterative formula for all
+        \item explanation of MGF
+    \end{itemize}
+\end{itemize}
+\section{Simulation}
+\begin{itemize}
+    \item Assumptions
+    are pretty much the same as for the analysis.
+    In the Paper the authors used Omnet++ which simulates the Physical Layer aswell
+    For my implementation python is used.
+    \item Implemented Iterative version as iterator
+    \item Pseudocode
+    \item using numpy for simulation to use c++ performance as far as possible.
+    That includes throwing the dice for the access probability (binomial distribution), choosing the preambles (uniform)
+    and counting how often each preamble was selected
+    \item Running large number of simulations
+    \item Multithreading over Searchspace\\
+    Actually its multiprocessing because python interpreter lock which restrics the python interpreter to use only
+    1 thread at the time to guarantee the consistency of shared objects.
+\end{itemize}
+\section{Simulation Results}
+Simulations seem to support analysis.
+Some configurations are not explicitly stated in the paper.
+\section*{References}
+\bibliographystyle{unsrturl}
+\bibliography{literature}
+%\bibliographystyle{IEEEtran}
+%\bibliography{IEEEabrv,mybibfile}
 \end{document}

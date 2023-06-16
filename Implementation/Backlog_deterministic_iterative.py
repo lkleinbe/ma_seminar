@@ -31,8 +31,8 @@ class AC_Mode(Enum):
     """
     no_barring = auto()
     static_barring = auto()
-    dynamic_barring = auto()
-    dynamic_estimated_barring = auto()
+    optimal_dynamic_barring = auto()
+    estimated_dynamic_barring = auto()
 
 
 @dataclass
@@ -156,9 +156,9 @@ class Simulation_instance(object):
             self.functionnext = func_no_barring
         elif self.sc.ac_mode == AC_Mode.static_barring:
             self.functionnext = func_static_barring
-        elif self.sc.ac_mode == AC_Mode.dynamic_barring:
+        elif self.sc.ac_mode == AC_Mode.optimal_dynamic_barring:
             self.functionnext = func_dynamic_barring
-        elif self.sc.ac_mode == AC_Mode.dynamic_estimated_barring:
+        elif self.sc.ac_mode == AC_Mode.estimated_dynamic_barring:
             self.functionnext = func_dynamic_estimated_barring
 
 
@@ -176,10 +176,12 @@ class Simulation_instance(object):
 
 if __name__ == "__main__":
     import matplotlib.pyplot as plt
-    s1 = Simulation_instance(System_characteristics(20, 170, 0), QoS_requirement(max_tolerated_backlog=0))
-    s2 = Simulation_instance(System_characteristics(20, 170, 0, AC_Mode.static_barring, 0.5), QoS_requirement(max_tolerated_backlog=0))
-    s3 = Simulation_instance(System_characteristics(20, 170, 0, AC_Mode.dynamic_barring), QoS_requirement(max_tolerated_backlog=0))
-    s4 = Simulation_instance(System_characteristics(20,170,0, AC_Mode.dynamic_estimated_barring), QoS_requirement(max_tolerated_backlog=0))
+    m = 20
+    N = 100
+    s1 = Simulation_instance(System_characteristics(m, N, 0), QoS_requirement(max_tolerated_backlog=0))
+    s2 = Simulation_instance(System_characteristics(m, N, 0, AC_Mode.static_barring, 0.5), QoS_requirement(max_tolerated_backlog=0))
+    s3 = Simulation_instance(System_characteristics(m, N, 0, AC_Mode.optimal_dynamic_barring), QoS_requirement(max_tolerated_backlog=0))
+    s4 = Simulation_instance(System_characteristics(m, N, 0, AC_Mode.estimated_dynamic_barring), QoS_requirement(max_tolerated_backlog=0))
     print("Backlog no barring")
     for x in s1:
         print(x)
@@ -204,15 +206,15 @@ if __name__ == "__main__":
     # fig.tight_layout()
     # fig.subplots_adjust(right=0.75)
     plt.show()
-    print("No Barring execution Time: ", timeit.timeit(
-        "for _ in Simulation_instance(System_characteristics(20, 170, 0, AC_Mode.no_barring, 0.5), QoS_requirement(required_burst_resolution_time=500)): pass",
-        globals=globals(), number=10000))
-    print("Static Barring execution Time: ", timeit.timeit(
-        "for _ in Simulation_instance(System_characteristics(20, 170, 0, AC_Mode.static_barring, 0.5), QoS_requirement(required_burst_resolution_time=500)): pass",
-        globals=globals(), number=10000))
-    print("Dynamic Barring execution Time: ", timeit.timeit(
-        "for _ in Simulation_instance(System_characteristics(20, 170, 0, AC_Mode.dynamic_barring, 0.5), QoS_requirement(required_burst_resolution_time=500)): pass",
-        globals=globals(), number=10000))
-    print("Dynamic Estimated Barring execution Time: ", timeit.timeit(
-        "for _ in Simulation_instance(System_characteristics(20, 170, 0, AC_Mode.dynamic_estimated_barring, 0.5), QoS_requirement(required_burst_resolution_time=500)): pass",
-        globals=globals(), number=10000))
+    # print("No Barring execution Time: ", timeit.timeit(
+    #     "for _ in Simulation_instance(System_characteristics(20, 170, 0, AC_Mode.no_barring, 0.5), QoS_requirement(required_burst_resolution_time=500)): pass",
+    #     globals=globals(), number=10000))
+    # print("Static Barring execution Time: ", timeit.timeit(
+    #     "for _ in Simulation_instance(System_characteristics(20, 170, 0, AC_Mode.static_barring, 0.5), QoS_requirement(required_burst_resolution_time=500)): pass",
+    #     globals=globals(), number=10000))
+    # print("Dynamic Barring execution Time: ", timeit.timeit(
+    #     "for _ in Simulation_instance(System_characteristics(20, 170, 0, AC_Mode.optimal_dynamic_barring, 0.5), QoS_requirement(required_burst_resolution_time=500)): pass",
+    #     globals=globals(), number=10000))
+    # print("Dynamic Estimated Barring execution Time: ", timeit.timeit(
+    #     "for _ in Simulation_instance(System_characteristics(20, 170, 0, AC_Mode.estimated_dynamic_barring, 0.5), QoS_requirement(required_burst_resolution_time=500)): pass",
+    #     globals=globals(), number=10000))
