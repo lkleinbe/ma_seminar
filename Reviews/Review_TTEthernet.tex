@@ -1,0 +1,40 @@
+%! Author = Leonard
+%! Date = 23.06.2023
+% Preamble
+\documentclass[12pt,british,a4paper]{article}
+% Packages
+\input{Packages_Layout}
+
+% Document
+\submissiontitle{Synthesis of Communication Schedules for
+TTEthernet-Based Mixed-Criticality Systems}
+\begin{document}
+\maketitle
+\section{Description}
+In the Report the findings of the Paper "Synthesis of Communication Schedules for
+TTEthernet-Based Mixed-Criticality Systems" are presented.
+Additionally, the necessary backgrounds are presented.
+Time Triggered Ethernet (TTE) is a communication protocol, which enables deterministic communication in networks with guarantees.
+To achieve that, a static schedule is needed.
+This schedule determines at which time a given node will forward a given frame.
+The goal of the paper is to create such a schedule, which satisfies time constraints and minimises delay. To create the schedule, the heuristic TTESO strategy is used, which first creates a initial solution with List scheduling. This solution is then further improved with Tabu Search.
+\section{Strengths}
+\begin{itemize}
+    \item The subject topic was presented in an understandable way.
+    The examples were especially helpful in understanding the topic.
+    \item The Background is presented without unnecessary information enabling readers to understand the topic without prior knowledge.
+    \item Especially Figure 3 was very helpful to comprehend the analysis framework.
+    I also like the annotation of parts of this figure to reference them in the text and explain the figure in detail.
+    \item I personally found the usage of ChatGPT for image creation a good use-case and will certainly try this out.
+\end{itemize}
+\section{Weaknesses}\begin{itemize}
+    \item In the Report a lot of abbreviations and acronyms are used.
+    This is obviously caused by the need to analyse the subject in a formal matter and therefore can not be avoided. However using a lot of acronyms makes reading the paper hard for readers without a subject related background. I suggest adding a informal annex/section/table after the References to list all acronyms and their written out description.
+    \item The order of the figures is a little confusing.
+    One example is figure 2, which is only once referenced in Section 3.a but after Figure 6 and 3 have used already a few times. One possible solution is to rearrange the order. However think some references to figures are still missing. E.g. I assume figure 2 was to be referenced and introduced on Page 2 already to explain the concept of dataflow paths.
+    \item At the end of Section III a reference is broken.
+    \item There is no evaluation of the proposed algorithms.
+    Usually the proposed algorithm is compared to other state-of-the-art algorithms or theoretical limits. This would also give you the ability to compare your simulation results to the algorithm in the paper. In the original paper they used a simulation benchmark for this as far as I can see. I suggest either presenting the performance of the algorithm in general or comparing your results to the one in the paper.
+    \item I suggest not submitting the seminar work under the same title as the paper itself. Something like "Seminar Report for $\dots$ " distinguishes your work from the original work. You could also add this information to the abstract. However, I think that is optional if your title is expressive enough.
+\end{itemize}
+\end{document}

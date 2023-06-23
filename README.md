@@ -19,5 +19,5 @@ Resolution Time](./Papers/On_the_Reliability_of_LTE_Random_Access_Performance_Bo
 
 
 For the implementation Python 3.8 is used. 
-Simply execute Implementation/main.py
+Simply execute Implementation/main.py\
 **If you are using Pycharm activate "Emulate terminal in output console" under configurations**

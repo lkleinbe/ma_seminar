@@ -1,0 +1,50 @@
+%! Author = Leonard
+%! Date = 23.06.2023
+% Preamble
+\documentclass[12pt,british,a4paper]{article}
+% Packages
+\input{Packages_Layout}
+
+% Document
+\submissiontitle{Report About GTS Allocation Analysis in
+IEEE 802.15.4 for Real-Time Wireless Sensor
+Networks}
+\begin{document}
+\maketitle
+\section{Description}
+The Report is about the Paper "GTS Allocation Analysis in
+IEEE 802.15.4 for Real-Time Wireless Sensor
+Networks".
+IEEE 802.15 is a networking protocol, which can operate in non-beacon-enabled mode and beacon enabled mode.
+When beacon enabled mode is used, different devices are assigned guaranteed timeslots(GTS), in which they can send their data.
+The Performance of the GTS is analysed in the paper.
+To calculate the delay bound, network calculus is used to define service curve, arrival curve and ultimately the delay bound.
+On the other hand normal calculus can be used to compute throughput and analyse the influence of frame size.
+Finally, the throughput in different frequency bands is compared.
+\section{Strengths}
+\begin{itemize}
+    \item The subject is presented in an understandable way.
+    This is especially helpful, because the subject is very theoretical and might therefor not be intuitive for some readers.
+    \item The necessary Background was presented without given too much detail.
+    \item Especially Figure 2 was useful for understanding the system characteristics as well as the Arrival and Service curve definition.
+\end{itemize}
+\pagebreak
+\section{Weaknesses}
+I found your report of high quality and I have only very little things to nitpick.
+\begin{itemize}
+    \item I suggest, explaining IFS in more detail.
+    The concept for IFS is very well explained in Section III but later formulas and even the Variable configuration use SIFS and LIFS.
+    The connection between these parameters is not explained and might be confusing for readers without the necessary background.
+    Further parameters like $N_{LIFS}$ are not explained at all which might make things even more confusing.
+    \item When creating plots for your own report, some libraries allow to export into PGF, which can be directly imported into Latex.
+    This allows Latex to render the plots on compile time, which increases sharpness and prevents unnecessary compression of the images.
+    It also allows you to use a consistent font and even math symbols, like they are used in latex.
+    E.g.\ when using matplotlib you can use something like this: \url{https://jwalton.info/Matplotlib-latex-PGF/}
+    \item You should also interpret your plots drawing insights from your numerical results.
+    On one Hand you can get direct insights how the GTS Performance behaves for different scenarios or interpret, how the performance behaves for different trends.#
+    On the other Hand you can explicitly compare your results to the one in the paper.
+    You did this for Fig 5 when you were explaining the results but your own figures are missing such an interpretation.
+    \item I think there is only one author.
+    The usage of the word "we" or "us" is not correct in that context.
+\end{itemize}
+\end{document}

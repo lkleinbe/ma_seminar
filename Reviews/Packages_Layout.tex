@@ -1,0 +1,81 @@
+%! Author = Leonard
+%! Date = 23.06.2023
+
+
+% PACKAGES
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\usepackage{titlesec}
+\usepackage{amsmath}
+\usepackage{amssymb}
+\usepackage{stmaryrd}
+\usepackage{tikz}
+\usepackage{xfrac}
+\usepackage{pdflscape}
+\usepackage[official]{eurosym}
+\usepackage{substr}
+\usepackage{mathrsfs}
+\usepackage{enumitem}
+% Standard Packages
+% -----------------------------------------------------------------------
+\usepackage[british]{babel}
+\usepackage{geometry} % alternatively type-area
+\usepackage{fancyhdr}
+
+
+% Font and Encoding Packages
+% -----------------------------------------------------------------------
+\usepackage[T1]{fontenc}    % enables symbols as ä, ö, ü, ß
+\usepackage[utf8]{inputenc} % uft8-encoded symbols can processed
+\usepackage{amsfonts}       % fonts mainly used in a mathematical context
+\usepackage[lighttt]{lmodern}
+%\usepackage[scaled=0.85]{DejaVuSansMono}
+
+% Symbols
+% -----------------------------------------------------------------------
+% Specialized symbols
+\usepackage{amssymb}	 % collection of mathematical symbols
+\usepackage{extarrows}	 % collection of various arrows
+
+
+% Maths Packages
+% -----------------------------------------------------------------------
+% These packages provide environments and commands for mathematical purposes
+\usepackage{mathtools} % huge collection for mathematical writing replaces/extends amsmath
+\usepackage{amsthm}    % provides claim-environments like theorem, lemma
+\usepackage{cases}     % provides environment 'cases' for case distinctions
+\usepackage{nicefrac}  % provides cmd 'nicefrac' to write '1/2' in texts
+
+
+% Table and Picture Packages
+% -----------------------------------------------------------------------
+\usepackage{array}      % provides cmd to program talbes, e.g. with of a column
+\usepackage{enumitem}   % user control over the basic list environments itemize, enumerate, and description
+\usepackage{graphicx}   % provides optional arguments for 'includegraphics' like scaling
+\usepackage{caption}    % enables description/captions for images, tables, algorithms
+\usepackage{float}      % provides the 'H' option for floating objects like figures
+\usepackage{pdfpages}   % enables the inclusion of PDFs in a latex document
+
+
+% Computer Science Packages
+% -----------------------------------------------------------------------
+\usepackage[small]{complexity} % tool set for complexity theory
+\usepackage{listings}          % integrate program source code into the pdf
+\usepackage{algorithm}         % provides basic environment for algorithm display
+\usepackage{algpseudocode}     % provides commands to write pseudocode
+
+
+% Citation, Reference, Colours
+% -----------------------------------------------------------------------
+\usepackage{hyperref} % provides clickable in-document-references
+\usepackage{xcolor}   % everything related to colours
+
+
+\newcommand{\submissiontitle}[1]{
+	\pagestyle{fancy}
+	\setlength{\headheight}{1pt}
+	\fancyhead[R]{\thepage}
+	\fancyfoot{}
+	\title{Review for "#1"}
+	\author{}
+	\date{}
+}

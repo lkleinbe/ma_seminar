@@ -18,7 +18,6 @@
 \usepackage{xcolor}
 % \usepackage{amstex}
 \usepackage{pgfplots}
-\usepackage{dsfont}
 
 
 
@@ -83,7 +82,7 @@ The EPC has the responsibility to authenticate the user sim cards, fetch the sub
 The structure of LTE networks is shown in figure \ref{fig:LTE_Network}.\\\\
 \begin{figure}
     \centering
-    \includegraphics[width= \columnwidth]{Figures/LTE_Netzwerk.png}
+    \includegraphics[width= \columnwidth]{../Figures/LTE_Netzwerk.png}
     \caption{Example structure of a LTE network. The Network is partitioned into E-UTRAN and EPC}
     \label{fig:LTE_Network}
 \end{figure}
@@ -94,7 +93,7 @@ Typically, the UE will follow up with an attachment procedure with the EPC and s
 Nevertheless, the Startup Procedure until the RRC Connected State will be the first bottleneck, which the UE will encounter.\\\\
 \begin{figure}
     \centering
-    \includegraphics[width= \columnwidth]{Figures/OtA_LTE_Startup.png}
+    \includegraphics[width= \columnwidth]{../Figures/OtA_LTE_Startup.png}
     \caption{Over the Air messages during the LTE Startup Phase. After Cell configuration 5 Messages have to be exchanged.}
     \label{fig:OtA_LTE_Startup}
 \end{figure}
@@ -123,14 +122,14 @@ In LTE time is divided into Frames with a duration of $10 ms$.
 LTE Frames are further divided into sub-frames with a duration of $1 ms$ each containing 2 Symbols, sometimes also called slots. These Symbols are then modulated onto sub-carrier using Amplitude Modulation. The Time division scheme of LTE is depicted in Figure \ref{fig:time}.\\\\
 \begin{figure}
     \centering
-    \includegraphics[width= \columnwidth]{Figures/LTE_Frame2.png}
+    \includegraphics[width= \columnwidth]{../Figures/LTE_Frame2.png}
     \caption{Time Division in LTE Systems \cite{ETSI_TS_138_211}. Time is divided into frames, sub frames and slots}
     \label{fig:time}
 \end{figure}
 Physical Resource Blocks (PRB) are then defined as symbols mapped to each sub-carrier. Usually PRBs contain multiple sub-carriers.
 \begin{figure}
     \centering
-    \includegraphics[width = \columnwidth]{Figures/Resource_Grid1.PNG}
+    \includegraphics[width = \columnwidth]{../Figures/Resource_Grid1.PNG}
     \caption{An example assignment of a Resource Grid \cite{ResourceGridCalculator}. Coloured PRBs are assigned for some task}
     \label{fig:grid}
 \end{figure}
@@ -314,7 +313,7 @@ Each task is characterised by a tuple \[(sc, qos, nr\_simulations)\] and submitt
 $sc$ and $qos$ are implemented similar to their definition in \ref{assumptions_analysis}.
 \begin{figure}
     \centering
-    \includegraphics[width = \columnwidth]{Figures/process_pool_worker.png}
+    \includegraphics[width = \columnwidth]{../Figures/process_pool_worker.png}
     \caption{scheme of the simulation setup. A process pool is used to distribute task to workers.}
     \label{fig:pool}
 \end{figure}
@@ -341,7 +340,7 @@ The typical use case for thread pools is usually IO limited tasks, justifying th
 Figure \ref{fig:backlog} shows the typical course of the Backlog over Time for the ACB Policies described in \ref{ACB}.
 We observe that the given System is at its limit when using no ACB, which has exponentially increased the burst resolution time.
 This can be solved using ACB. The estimated dynamic ACB Policy is also very close to the optimal solution. However we will later see, that the estimated dynamic ACB Policy still has a performance overall.\\\\
-Next we can analyse the violation probability $\epsilon$ for different allowed backlogs $b^\epsilon$
+Next we can analyse the violation probability $\epsilon$ for different allowed backlogs $b^\epsilon$ as depicted in figure \ref{fig:violation prob}
 \begin{figure}
 \resizebox{\columnwidth}{!}{\input{../Figures/figure_2.pgf}}
     \caption{violation Probability vs. max. allowed backlog as line chart. $b^\epsilon$,  $M = 30$, $N = 100$, $t = 15$, static ACB $p=0.5$, 100000 Samples.\\Allowing more backlog reduces the violation probability exponentially.}\label{fig:violation prob}
@@ -353,7 +352,10 @@ However, the authors forget to explicitly state that $t = 15$ which made finding
 Figure \ref{fig:max UEs supported} then shows the maximum number of UEs a cell with 10 Preambles can support, for different violation probabilities.
 We can observe exponential behaviour here as well implying that with higher number of UEs the violation probability for a given QoS will increase exponentially.
 This simulation uses the optimal ACB policy therefore the results are only theoretical.\\\\
-Finally one can compare the optimal ACB policy against the estimated dynamic ACB policy. The simulation results are shown in \ref{fig:5} plotting the violation probability against vs the burst resolution time. We can infer, that the estimated dynamic ACB Policy generally needs more time to guarantee the same violation probability as the optimal ACB Policy. For $m = 10$ this delay was about 25 time steps.
+Finally one can compare the optimal ACB policy against the estimated dynamic ACB policy.
+The simulation results are shown in \ref{fig:5} plotting the violation probability against vs the burst resolution time.
+We can infer, that the estimated dynamic ACB Policy generally needs more time to guarantee the same violation probability as the optimal ACB Policy.
+For $m = 20$ this delay was about 25 time steps.
 \begin{figure}
 \resizebox{\columnwidth}{!}{\input{../Figures/figure_3.pgf}}
     \caption{maximum number of supported UEs vs total burst resolution violation probability as line chart for M = {10}}\label{fig:max UEs supported}
@@ -366,15 +368,15 @@ Finally one can compare the optimal ACB policy against the estimated dynamic ACB
 \section{Conclusion}
 In this work, I presented the necessary background to understand the LTE Startup Procedure and analyse the RACH Procedure.
 For Burst Arrivals of large number, I showed how one can compute the backlog over time and how this can implemented in a simulation.
-Further I summarised the results of \cite{8422323}.
+Further I summarized the results of \cite{8422323}.
 The simulations done in this work support the findings of the paper in every aspect.
 For one case, the missing parameters were calculated.
 Future work can further improve the analysis method into finding a framework, which allows for even tighter computation of performance bounds.
-Addition work is also necessary to find good Values for $c$ which is essential for the analysis of the violation probability of QoS Requirements.
+Additional work is also necessary to find good Values for $c$, which is essential for the analysis of the violation probability of QoS Requirements.
 Finally, there exist more techniques than ACB, which can improve burst resolution time.
 These additional techniques still need to be added into the analysis framework to give complete insights into the possible performance bounds for the RACH Procedure.
 \bibliographystyle{unsrturl}
-\bibliography{Literature}
+\bibliography{literature}
 \section*{Abbreviations and Acronyms}
     \begin{tabular}{l r}
         ACB & Access Barring\\
