@@ -1,5 +1,6 @@
 import inquirer
 import matplotlib as mpl
+import numpy as np
 
 if __name__ == "__main__":
 
@@ -22,16 +23,17 @@ if __name__ == "__main__":
             'pgf.rcfonts': False,
         })
 
-
+    np.random.seed(0)
     from Plot import *
 
 
     label2func = {
         "Backlog vs time": figure_backlog,
+        "Backlog vs time only ACB": figure_backlog_withACB,
         "max UEs supported vs Violation Probability": figure_3,
         "runtime vs ACB Policy": figure_runtime,
         "violation Probability vs Backlog": figure_2,
-        "violation probability vs Burst resolution time": figure_5
+        "violation probability vs Burst resolution time": figure_5,
     }
 
     questions = [
